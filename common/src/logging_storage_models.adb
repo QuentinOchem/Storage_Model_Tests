@@ -4,6 +4,13 @@ with System.CRTL; use System.CRTL;
 
 package body Logging_Storage_Models is
 
+   procedure Log (Model : Logging_Storage_Model; Text : String) is
+   begin
+      if Model.Display_Log then
+         Put_Line (Text);
+      end if;
+   end Log;
+
    procedure Allocate
      (Model           : in out Logging_Storage_Model;
       Storage_Address : out Logging_Address;
@@ -15,8 +22,9 @@ package body Logging_Storage_Models is
       Storage_Address.Address := Malloc (Size_T (Size));
       Storage_Address.Object_Index := Model.Count_Allocate;
 
-      Put_Line
-        ("Allocating"
+      Log
+        (Model,
+         "Allocating"
          & Size'Img
          & " bytes of alignment"
          & Alignment'Img
@@ -34,8 +42,9 @@ package body Logging_Storage_Models is
       Model.Count_Deallocate := @ + 1;
       Free (Storage_Address.Address);
 
-      Put_Line
-        ("Deallocating"
+      Log
+        (Model,
+         "Deallocating"
          & Size'Img
          & " bytes of alignment"
          & Alignment'Img
@@ -53,8 +62,9 @@ package body Logging_Storage_Models is
       Model.Count_Write := @ + 1;
       Memcpy (Target.Address, Source, size_T (Size));
 
-      Put_Line
-        ("Copying"
+      Log
+        (Model,
+         "Copying"
          & Size'Img
          & " bytes"
          & "to object #"
@@ -70,8 +80,9 @@ package body Logging_Storage_Models is
       Model.Count_Write := @ + 1;
       Memcpy (Target, Source.Address, size_T (Size));
 
-      Put_Line
-        ("Copying"
+      Log
+        (Model,
+         "Copying"
          & Size'Img
          & " bytes"
          & "from object #"
