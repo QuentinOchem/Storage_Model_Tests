@@ -1,0 +1,4 @@
+obj/*
+*.xml
+*.stderr
+*.stdout
