@@ -10,15 +10,15 @@ package Logging_Storage_Models is
       Count_Deallocate : Integer := 0;
       Display_Log      : Boolean := False;
    end record
-     with
-       Address_Type          => Logging_Address,
-       Allocate              => Logging_Allocate,
-       Deallocate            => Logging_Deallocate,
-       Copy_To               => Logging_Copy_To,
-       Copy_From             => Logging_Copy_From,
-       Storage_Size          => Logging_Storage_Size,
-       Add_Offset            => Logging_Add_Offset,
-       Null_Address          => Logging_Null_Address;
+     with Storage_Model_Type =>
+       (Address_Type          => Logging_Address,
+        Allocate              => Logging_Allocate,
+        Deallocate            => Logging_Deallocate,
+        Copy_To               => Logging_Copy_To,
+        Copy_From             => Logging_Copy_From,
+        Storage_Size          => Logging_Storage_Size,
+        Add_Offset            => Logging_Add_Offset,
+        Null_Address          => Logging_Null_Address);
 
    type Logging_Address is record
       Address      : System.Address;
