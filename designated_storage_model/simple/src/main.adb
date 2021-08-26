@@ -17,9 +17,6 @@ procedure Main is
    Host_Array : Host_Array_Access := new Integer_Array (1 .. 10);
 
    Device_Array : Device_Array_Access;
-   --  Calls CUDA_Storage_Model.Allocate to allocate the fat pointers and
-   --  the bounds, then CUDA_Storage_Model.Copy_In to copy the values of the
-   --  boundaries.
 begin
    Model.Display_Log := True;
 
