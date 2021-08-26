@@ -3,7 +3,7 @@ with System.Storage_Elements; use System.Storage_Elements;
 
 package Logging_Storage_Models is
 
-   type Logging_Storage_Model is record
+   type Logging_Storage_Model is limited record
       Count_Write      : Integer := 0;
       Count_Read       : Integer := 0;
       Count_Allocate   : Integer := 0;
