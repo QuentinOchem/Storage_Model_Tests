@@ -19,8 +19,8 @@ package body Logging_Storage_Models is
    is
    begin
       Model.Count_Allocate := @ + 1;
-      Storage_Address.Address := Malloc (Size_T (Size));
-      Storage_Address.Object_Index := Model.Count_Allocate;
+      Storage_Address := Logging_Address (Malloc (Size_T (Size)));
+      Model.Ids.Insert (Storage_Address, Model.Count_Allocate);
 
       Log
         (Model,
@@ -29,7 +29,7 @@ package body Logging_Storage_Models is
          & " bytes of alignment"
          & Alignment'Img
          & "for object #"
-         & Storage_Address.Object_Index'Img);
+         & Model.Count_Allocate'Img);
    end Allocate;
 
    procedure Deallocate
@@ -40,7 +40,7 @@ package body Logging_Storage_Models is
    is
    begin
       Model.Count_Deallocate := @ + 1;
-      Free (Storage_Address.Address);
+      Free (System.Address (Storage_Address));
 
       Log
         (Model,
@@ -49,7 +49,7 @@ package body Logging_Storage_Models is
          & " bytes of alignment"
          & Alignment'Img
          & "for object #"
-         & Storage_Address.Object_Index'Img);
+         & Integer'Image (Model.Ids.Element (Storage_Address)));
    end Deallocate;
 
    procedure Logging_Copy_To
@@ -60,7 +60,7 @@ package body Logging_Storage_Models is
    is
    begin
       Model.Count_Write := @ + 1;
-      Memcpy (Target.Address, Source, size_T (Size));
+      Memcpy (System.Address (Target), Source, size_T (Size));
 
       Log
         (Model,
@@ -68,7 +68,7 @@ package body Logging_Storage_Models is
          & Size'Img
          & " bytes"
          & "to object #"
-         & Target.Object_Index'Img);
+         & Integer'Image (Model.Ids.Element (Target)));
    end Logging_Copy_To;
 
    procedure Logging_Copy_From
@@ -78,7 +78,7 @@ package body Logging_Storage_Models is
       Size   : Storage_Count) is
    begin
       Model.Count_Write := @ + 1;
-      Memcpy (Target, Source.Address, size_T (Size));
+      Memcpy (Target, System.Address (Source), size_T (Size));
 
       Log
         (Model,
@@ -86,7 +86,7 @@ package body Logging_Storage_Models is
          & Size'Img
          & " bytes"
          & "from object #"
-         & Source.Object_Index'Img);
+         & Integer'Image (Model.Ids.Element (Source)));
    end Logging_copy_From;
 
    function Storage_Size
@@ -96,18 +96,5 @@ package body Logging_Storage_Models is
    begin
       return 0;
    end Storage_Size;
-
-   function Add_Offset
-     (Model : in out Logging_Storage_Model;
-      Left  : Logging_Address;
-      Right : Storage_Count) return Logging_Address
-   is
-      Result : Logging_Address;
-   begin
-      Result.Object_Index := Left.Object_Index;
-      Result.Address := Left.Address + Right;
-
-      return Result;
-   end Add_Offset;
 
 end Logging_Storage_Models;
