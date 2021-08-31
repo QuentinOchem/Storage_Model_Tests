@@ -2,3 +2,5 @@ obj/*
 *.xml
 *.stderr
 *.stdout
+*.cgpr
+*.ali

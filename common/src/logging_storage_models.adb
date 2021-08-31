@@ -77,7 +77,7 @@ package body Logging_Storage_Models is
       Source : Logging_Address;
       Size   : Storage_Count) is
    begin
-      Model.Count_Write := @ + 1;
+      Model.Count_Read := @ + 1;
       Memcpy (Target, System.Address (Source), size_T (Size));
 
       Log
