@@ -30,13 +30,13 @@ package Logging_Storage_Models is
    Logging_Null_Address : constant Logging_Address :=
      Logging_Address (System.Null_Address);
 
-   procedure Allocate
+   procedure Logging_Allocate
      (Model           : in out Logging_Storage_Model;
       Storage_Address : out Logging_Address;
       Size            : Storage_Count;
       Alignment       : Storage_Count);
 
-   procedure Deallocate
+   procedure Logging_Deallocate
      (Model           : in out Logging_Storage_Model;
       Storage_Address : Logging_Address;
       Size            : Storage_Count;
@@ -54,7 +54,7 @@ package Logging_Storage_Models is
       Source : Logging_Address;
       Size   : Storage_Count);
 
-   function Storage_Size
+   function Logging_Storage_Size
      (Model : Logging_Storage_Model)
    return Storage_Count;
 

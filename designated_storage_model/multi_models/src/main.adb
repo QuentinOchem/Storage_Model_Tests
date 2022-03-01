@@ -7,10 +7,12 @@ procedure Main is
    Model_1 : Logging_Storage_Model;
    Model_2 : Logging_Storage_Model;
 
-   type Device_Array_Access_1 is access all Integer_Array
+-- type Device_Array_Access_1 is access all Integer_Array
+   type Device_Array_Access_1 is access Integer_Array
      with Designated_Storage_Model => Model_1;
 
-   type Device_Array_Access_2 is access all Integer_Array
+-- type Device_Array_Access_2 is access all Integer_Array
+   type Device_Array_Access_2 is access Integer_Array
       with Designated_Storage_Model => Model_2;
 
    procedure Free is new Ada.Unchecked_Deallocation

@@ -11,7 +11,7 @@ package body Logging_Storage_Models is
       end if;
    end Log;
 
-   procedure Allocate
+   procedure Logging_Allocate
      (Model           : in out Logging_Storage_Model;
       Storage_Address : out Logging_Address;
       Size            : Storage_Count;
@@ -30,9 +30,9 @@ package body Logging_Storage_Models is
          & Alignment'Img
          & "for object #"
          & Model.Count_Allocate'Img);
-   end Allocate;
+   end Logging_Allocate;
 
-   procedure Deallocate
+   procedure Logging_Deallocate
      (Model           : in out Logging_Storage_Model;
       Storage_Address : Logging_Address;
       Size            : Storage_Count;
@@ -50,7 +50,7 @@ package body Logging_Storage_Models is
          & Alignment'Img
          & "for object #"
          & Integer'Image (Model.Ids.Element (Storage_Address)));
-   end Deallocate;
+   end Logging_Deallocate;
 
    procedure Logging_Copy_To
      (Model  : in out Logging_Storage_Model;
@@ -89,12 +89,12 @@ package body Logging_Storage_Models is
          & Integer'Image (Model.Ids.Element (Source)));
    end Logging_copy_From;
 
-   function Storage_Size
+   function Logging_Storage_Size
      (Model : Logging_Storage_Model)
       return Storage_Count
    is
    begin
       return 0;
-   end Storage_Size;
+   end Logging_Storage_Size;
 
 end Logging_Storage_Models;

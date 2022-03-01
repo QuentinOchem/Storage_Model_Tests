@@ -4,7 +4,8 @@ with Logging_Storage_Models; use Logging_Storage_Models;
 with Test_Support; use Test_Support;
 
 procedure Main is
-   type Device_Array_Access is access all Integer_Array
+-- type Device_Array_Access is access all Integer_Array
+   type Device_Array_Access is access Integer_Array
       with Designated_Storage_Model => Logging_Storage_Models.Model;
 
    procedure Free is new Ada.Unchecked_Deallocation
