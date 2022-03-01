@@ -8,11 +8,9 @@ procedure Main is
       A, B : Integer;
    end record;
 
--- type Simple_Record_Host_Access is access all Simple_Record
    type Simple_Record_Host_Access is access Simple_Record
       with Designated_Storage_Model => Logging_Storage_Models.Model;
 
--- type Simple_Record_Device_Access is access all Simple_Record
    type Simple_Record_Device_Access is access Simple_Record
       with Designated_Storage_Model => Logging_Storage_Models.Model;
 
