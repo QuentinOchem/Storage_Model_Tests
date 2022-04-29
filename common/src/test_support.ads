@@ -11,7 +11,7 @@ package Test_Support is
 
    Host_Array : Host_Array_Access := new Integer_Array (1 .. 10);
 
-   Test_Array_Value : Integer_Array := (10, 20, 30, 40, 50, 60, 70, 90, 100);
+   Test_Array_Value : Integer_Array := (10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
    Test_Array_Reset : Integer_Array (1 .. 10) := (others => 0);
 
 end Test_Support;
