@@ -11,24 +11,25 @@ procedure Main is
       (Integer_Array, Device_Array_Access);
 
    Device_Array : Device_Array_Access;
+   Prev_Count : Integer;
 begin
    Model.Display_Log := True;
 
    pragma Assert (Model.Count_Allocate = 0);
    Device_Array := new Integer_Array (1 .. 10);
-   pragma Assert (Model.Count_Allocate = 1);
+   pragma Assert (Model.Count_Allocate > 0);
 
    Host_Array.all := Test_Array_Value;
 
-   pragma Assert (Model.Count_Write = 0);
+   Prev_Count := Model.Count_Write;
    Device_Array.all := Host_Array.all;
-   pragma Assert (Model.Count_Write = 1);
+   pragma Assert (Model.Count_Write > Prev_Count);
 
    Host_Array.all := Test_Array_Reset;
 
-   pragma Assert (Model.Count_Read = 0);
+   Prev_Count := Model.Count_Read;
    Host_Array.all := Device_Array.all;
-   pragma Assert (Model.Count_Read = 1);
+   pragma Assert (Model.Count_Read > Prev_Count);
 
    pragma Assert (Host_Array.all = Test_Array_Value);
 
