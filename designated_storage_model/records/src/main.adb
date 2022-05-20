@@ -1,3 +1,4 @@
+with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Unchecked_Deallocation;
 
 with Logging_Storage_Models; use Logging_Storage_Models;
@@ -8,26 +9,47 @@ procedure Main is
       A, B : Integer;
    end record;
 
-   type Simple_Record_Host_Access is access Simple_Record
-      with Designated_Storage_Model => Logging_Storage_Models.Model;
+   type Simple_Record_Host_Access is access Simple_Record;
 
    type Simple_Record_Device_Access is access Simple_Record
       with Designated_Storage_Model => Logging_Storage_Models.Model;
 
    Host_Record : Simple_Record_Host_Access;
    Device_Record : Simple_Record_Device_Access;
+   Prev_Count : Integer;
 begin
-   Host_Record := new Simple_Record'(10, 20);
-   Device_Record := new Simple_Record;
+   Model.Display_Log := True;
 
-   pragma Assert (Model.Count_Write = 0);
-   Device_Record.A := 10;
-   pragma Assert (Model.Count_Write = 1);
-   Device_Record.B := 20;
-   pragma Assert (Model.Count_Write = 2);
-   pragma Assert (Model.Count_Read = 0);
+   Put_Line ("Initialize device");
+
+   Host_Record := new Simple_Record;
+   Device_Record := new Simple_Record'(10, 20);
+
+   Put_Line ("Retreive device values");
+
+   Prev_Count := Model.Count_Read;
+   Host_Record.all := (0, 0);
    Host_Record.all := Device_Record.all;
-   pragma Assert (Model.Count_Read = 1);
+   pragma Assert (Model.Count_Read > Prev_Count);
 
    pragma Assert (Host_Record.all = (10, 20));
+
+   Put_Line ("Write two integer to device");
+
+   Prev_Count := Model.Count_Write;
+   Device_Record.A := 30;
+   pragma Assert (Model.Count_Write > Prev_Count);
+
+   Prev_Count := Model.Count_Write;
+   Device_Record.B := 40;
+   pragma Assert (Model.Count_Write > Prev_Count);
+
+   Put_Line ("Retreive device values");
+
+   Prev_Count := Model.Count_Read;
+   Host_Record.all := (0, 0);
+   Host_Record.all := Device_Record.all;
+   pragma Assert (Model.Count_Read > Prev_Count);
+
+   pragma Assert (Host_Record.all = (30, 40));
 end Main;
