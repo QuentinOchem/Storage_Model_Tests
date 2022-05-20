@@ -11,16 +11,35 @@ package body Logging_Storage_Models is
       end if;
    end Log;
 
+   function Get_Id (Model :  Logging_Storage_Model; Addr : Logging_Address) return Integer is
+      Address : Integer with Address => Addr'Address;
+   begin
+      for R of Model.Ids loop
+         if Address >= R.Addr and then Address < R.Addr + Integer (R.Size) then
+            return R.Id;
+         end if;
+      end loop;
+
+      return -1;
+   end Get_Id;
+
    procedure Logging_Allocate
      (Model           : in out Logging_Storage_Model;
       Storage_Address : out Logging_Address;
       Size            : Storage_Count;
       Alignment       : Storage_Count)
    is
+      New_Region : Region;
+      Address : Integer with Address => Storage_Address'Address;
    begin
       Model.Count_Allocate := @ + 1;
       Storage_Address := Logging_Address (Malloc (Size_T (Size)));
-      Model.Ids.Insert (Storage_Address, Model.Count_Allocate);
+
+      New_Region.Addr := Address;
+      New_Region.Size := Size;
+      New_Region.Id := Model.Count_Allocate;
+
+      Model.Ids.Append (New_Region);
 
       Log
         (Model,
@@ -28,7 +47,7 @@ package body Logging_Storage_Models is
          & Size'Img
          & " bytes of alignment"
          & Alignment'Img
-         & "for object #"
+         & " for object #"
          & Model.Count_Allocate'Img);
    end Logging_Allocate;
 
@@ -48,8 +67,8 @@ package body Logging_Storage_Models is
          & Size'Img
          & " bytes of alignment"
          & Alignment'Img
-         & "for object #"
-         & Integer'Image (Model.Ids.Element (Storage_Address)));
+         & " for object #"
+         & Integer'Image (Get_Id (Model, Storage_Address)));
    end Logging_Deallocate;
 
    procedure Logging_Copy_To
@@ -66,9 +85,8 @@ package body Logging_Storage_Models is
         (Model,
          "Copying"
          & Size'Img
-         & " bytes"
-         & "to object #"
-         & Integer'Image (Model.Ids.Element (Target)));
+         & " bytes to object #"
+         & Integer'Image (Get_Id (Model, Target)));
    end Logging_Copy_To;
 
    procedure Logging_Copy_From
@@ -84,9 +102,8 @@ package body Logging_Storage_Models is
         (Model,
          "Copying"
          & Size'Img
-         & " bytes"
-         & "from object #"
-         & Integer'Image (Model.Ids.Element (Source)));
+         & " bytes from object #"
+         & Integer'Image (Get_Id (Model, Source)));
    end Logging_copy_From;
 
    function Logging_Storage_Size

@@ -1,14 +1,20 @@
 with System; use System;
 with System.Storage_Elements; use System.Storage_Elements;
 
-with Ada.Containers.Ordered_Maps;
+with Ada.Containers.Indefinite_Doubly_Linked_Lists;
 
 package Logging_Storage_Models is
 
    type Logging_Address is new System.Address;
 
-   package Object_Ids is new Ada.Containers.Ordered_Maps
-     (Logging_Address, Integer);
+   type Region is record
+      Addr : Integer;
+      Size : Storage_Count;
+      Id   : Integer;
+   end record;
+
+   package Object_Ids is new Ada.Containers.Indefinite_Doubly_Linked_Lists
+     (Region);
 
    type Logging_Storage_Model is limited record
       Count_Write      : Integer := 0;
@@ -16,7 +22,7 @@ package Logging_Storage_Models is
       Count_Allocate   : Integer := 0;
       Count_Deallocate : Integer := 0;
       Display_Log      : Boolean := False;
-      Ids              : Object_Ids.Map;
+      Ids              : Object_Ids.List;
    end record
      with Storage_Model_Type =>
        (Address_Type          => Logging_Address,
