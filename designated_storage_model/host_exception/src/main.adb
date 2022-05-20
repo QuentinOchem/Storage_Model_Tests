@@ -1,3 +1,4 @@
+with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Unchecked_Deallocation;
 
 with Logging_Storage_Models; use Logging_Storage_Models;
@@ -18,6 +19,7 @@ begin
       Host_Array.all := Device_Array.all;
    exception
       when Constraint_Error =>
+         Put_Line ("GOT EXCEPTION");
          Got_Exception := True;
    end;
 
