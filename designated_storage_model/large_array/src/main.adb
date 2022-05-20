@@ -14,13 +14,16 @@ procedure Main is
 
    Large_Host_Array : Host_Array_Access;
    Large_Device_Array : Device_Array_Access;
+
+   Prev_Count : Integer;
 begin
+   Model.Display_Log := True;
+
    Large_Host_Array := new Integer_Array (1 .. N);
    Large_Device_Array := new Integer_Array (1 .. N);
 
    Large_Host_Array.all := (others => 999);
 
-   pragma Assert (Model.Count_Write = 0);
    Large_Device_Array.all := Large_Host_Array.all;
 
    --  Note - we want some liberty has to how such large amount of data is
@@ -34,7 +37,6 @@ begin
    --  Verify an arbitrary position
    pragma Assert (Large_Host_Array (1024 * 1024 * 2 + 4) = 0);
 
-   pragma Assert (Model.Count_Read = 0);
    Large_Host_Array.all := Large_Device_Array.all;
    pragma Assert (Model.Count_Read <= 16 * 1024);
 
