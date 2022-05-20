@@ -1,6 +1,7 @@
 with System; use System;
 with System.Storage_Elements; use System.Storage_Elements;
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Indefinite_Doubly_Linked_Lists;
 
 package Logging_Storage_Models is
@@ -17,6 +18,7 @@ package Logging_Storage_Models is
      (Region);
 
    type Logging_Storage_Model is limited record
+      Name             : Unbounded_String;
       Count_Write      : Integer := 0;
       Count_Read       : Integer := 0;
       Count_Allocate   : Integer := 0;

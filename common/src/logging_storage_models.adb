@@ -43,7 +43,7 @@ package body Logging_Storage_Models is
 
       Log
         (Model,
-         "Allocating"
+         To_String (Model.Name) & " Allocating"
          & Size'Img
          & " bytes of alignment"
          & Alignment'Img
@@ -63,7 +63,7 @@ package body Logging_Storage_Models is
 
       Log
         (Model,
-         "Deallocating"
+         To_String (Model.Name) & " Deallocating"
          & Size'Img
          & " bytes of alignment"
          & Alignment'Img
@@ -83,7 +83,7 @@ package body Logging_Storage_Models is
 
       Log
         (Model,
-         "Copying"
+         To_String (Model.Name) & " Copying"
          & Size'Img
          & " bytes to object #"
          & Integer'Image (Get_Id (Model, Target)));
@@ -100,7 +100,7 @@ package body Logging_Storage_Models is
 
       Log
         (Model,
-         "Copying"
+         To_String (Model.Name) & " Copying"
          & Size'Img
          & " bytes from object #"
          & Integer'Image (Get_Id (Model, Source)));
