@@ -35,6 +35,7 @@ begin
    Put_Line ("Copy from device to host");
 
    Prev_Count := Model.Count_Read;
+   pragma Assert (Host_Array.all /= Test_Array_Value);
    Host_Array.all := Device_Array.all;
    pragma Assert (Model.Count_Read > Prev_Count);
 
