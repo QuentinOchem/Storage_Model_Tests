@@ -6,6 +6,11 @@ with Ada.Containers.Indefinite_Doubly_Linked_Lists;
 
 package Logging_Storage_Models is
 
+   type Native_Storage_Model is limited record
+      null;
+   end record
+     with Storage_Model_Type => (Address_Type => System.Address);
+
    type Logging_Address is new System.Address;
 
    type Region is record
@@ -67,5 +72,7 @@ package Logging_Storage_Models is
    return Storage_Count;
 
    Model : Logging_Storage_Model;
+
+   No_Model : Native_Storage_Model;
 
 end Logging_Storage_Models;
