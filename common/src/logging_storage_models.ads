@@ -9,7 +9,7 @@ package Logging_Storage_Models is
    type Native_Storage_Model is limited record
       null;
    end record
-     with Storage_Model_Type => (Address_Type => System.Address);
+     with Storage_Model_Type;
 
    type Logging_Address is new System.Address;
 
