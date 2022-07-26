@@ -11,6 +11,8 @@ procedure Main is
    Device_Array : Device_Array_Access;
    Got_Exception : Boolean := False;
 begin
+   Model.Display_Log := True;
+
    Device_Array := new Integer_Array'(1 .. 20 => 999);
 
    begin

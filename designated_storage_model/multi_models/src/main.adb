@@ -26,6 +26,8 @@ procedure Main is
    Prev_Count_1 : Integer;
    Prev_Count_2 : Integer;
 begin
+   Model.Display_Log := True;
+
    Model_1.Display_Log := True;
    Model_2.Display_Log := True;
 

@@ -34,6 +34,10 @@ begin
 
    Host_Array.all := Test_Array_Value;
 
+   Put_Line ("Array access");
+   Device_Array (1) := 99999;
+   Put_Line ("After Array access");
+
    Put_Line ("Copy from host to device");
 
    Prev_Count := Model.Count_Write;
@@ -48,6 +52,9 @@ begin
    pragma Assert (Host_Array.all /= Test_Array_Value);
    Host_Array.all := Device_Array.all;
    pragma Assert (Model.Count_Read > Prev_Count);
+
+   Put_Line ("Host_Array: " & Host_Array.all'Image);
+   Put_Line ("Test_Array_Value: " & Test_Array_Value'Image);
 
    pragma Assert (Host_Array.all = Test_Array_Value);
 
