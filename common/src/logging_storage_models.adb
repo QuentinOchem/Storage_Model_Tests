@@ -1,8 +1,16 @@
+with System; use System;
+with Ada.Unchecked_Conversion;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with System.CRTL; use System.CRTL;
 
 package body Logging_Storage_Models is
+
+   function Convert1 is new Ada.Unchecked_Conversion (System.Address, Long_Integer);
+   function Convert2 is new Ada.Unchecked_Conversion (Long_Integer, Logging_Address);
+
+   function Convert3 is new Ada.Unchecked_Conversion (Logging_Address, Long_Integer);
+   function Convert4 is new Ada.Unchecked_Conversion (Long_Integer, System.Address);
 
    procedure Log (Model : Logging_Storage_Model; Text : String) is
    begin
@@ -23,6 +31,26 @@ package body Logging_Storage_Models is
       return -1;
    end Get_Id;
 
+   function Host_To_Device (Addr: System.Address) return Logging_Address
+   is
+      Int_Address : Long_Integer;
+   begin
+      Int_Address := Convert1 (Addr);
+      Int_Address := Int_Address + 2**62;
+
+      return Convert2 (Int_Address);
+   end Host_To_Device;
+
+   function Device_To_Host (Addr: Logging_Address) return System.Address
+   is
+      Int_Address : Long_Integer;
+   begin
+      Int_Address := Convert3 (Addr);
+      Int_Address := Int_Address - 2**62;
+
+      return Convert4 (Int_Address);
+   end Device_To_Host;
+
    procedure Logging_Allocate
      (Model           : in out Logging_Storage_Model;
       Storage_Address : out Logging_Address;
@@ -33,7 +61,8 @@ package body Logging_Storage_Models is
       Address : Integer with Address => Storage_Address'Address;
    begin
       Model.Count_Allocate := @ + 1;
-      Storage_Address := Logging_Address (Malloc (Size_T (Size)));
+
+      Storage_Address := Host_To_Device (Malloc (Size_T (Size)));
 
       New_Region.Addr := Address;
       New_Region.Size := Size;
@@ -48,7 +77,12 @@ package body Logging_Storage_Models is
          & " bytes of alignment"
          & Alignment'Img
          & " for object #"
-         & Model.Count_Allocate'Img);
+         & Model.Count_Allocate'Img
+         & " at virt: "
+         & Storage_Address'Img
+         & " / real: "
+         & Device_To_Host (Storage_Address)'Img);
+
    end Logging_Allocate;
 
    procedure Logging_Deallocate
@@ -59,7 +93,7 @@ package body Logging_Storage_Models is
    is
    begin
       Model.Count_Deallocate := @ + 1;
-      Free (System.Address (Storage_Address));
+      Free (System.Address (Device_To_Host (Storage_Address)));
 
       Log
         (Model,
@@ -79,7 +113,7 @@ package body Logging_Storage_Models is
    is
    begin
       Model.Count_Write := @ + 1;
-      Memcpy (System.Address (Target), Source, size_T (Size));
+      Memcpy (Device_To_Host (Target), Source, size_T (Size));
 
       Log
         (Model,
@@ -96,7 +130,7 @@ package body Logging_Storage_Models is
       Size   : Storage_Count) is
    begin
       Model.Count_Read := @ + 1;
-      Memcpy (Target, System.Address (Source), size_T (Size));
+      Memcpy (Target, Device_To_Host (Source), size_T (Size));
 
       Log
         (Model,

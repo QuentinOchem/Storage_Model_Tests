@@ -7,10 +7,8 @@ project Test is
    for Main use ("main");
 
    package Compiler is
-      for Driver ("ada") use "llvm-gcc";
-      for Switches ("ada") use ("-gnatX", "-gnata", "-g"
-      --, "-emit-c"
-      );
+      for Driver ("ada") use external ("backend", "llvm-gcc");
+      for Switches ("ada") use ("-gnatX", "-gnata", "-g");
    end Compiler;
 
 end Test;

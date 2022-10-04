@@ -24,6 +24,8 @@ procedure Main is
    Host_3D : Ptr_Matrix3D;
    Device_3D : Ptr_Matrix3D_Device;
 begin
+   Model.Display_Log := True;
+
    Device_2D := new Matrix2D (1 .. 10, 10 .. 20);
    Device_3D := new Matrix3D (1 .. 10, 10 .. 20, 20 .. 30);
 

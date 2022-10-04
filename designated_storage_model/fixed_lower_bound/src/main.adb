@@ -11,12 +11,20 @@ procedure Main is
 
    Device_FLB : Ptr_FLB_Device;
 begin
+   Model.Display_Log := True;
+
+   Put_Line ("Allocating on device");
+
    Device_FLB := new FLB (0 .. 255);
+
+   Put_Line ("Initialize data on device");
 
    Device_FLB.all := (others => 99);
 
+   Put_Line ("Write single data on device");
    Device_FLB (8) := 888;
 
+   Put_Line ("Checking results");
    pragma Assert (Device_FLB (1) = 99);
    pragma Assert (Device_FLB (8) = 888);
    pragma Assert (Model.Count_Write > 0);

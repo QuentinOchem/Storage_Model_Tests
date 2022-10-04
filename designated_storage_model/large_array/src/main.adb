@@ -27,7 +27,7 @@ begin
    Large_Device_Array.all := Large_Host_Array.all;
 
    --  Note - we want some liberty has to how such large amount of data is
-   --  copied. However, this is a typicall cases where we can't do component by
+   --  copied. However, this is a typical cases where we can't do component by
    --  component copy as this would be too slow. This assumes that we copy at
    --  least 1 Ko of memory at a time.
    pragma Assert (Model.Count_Write <= 16 * 1024);

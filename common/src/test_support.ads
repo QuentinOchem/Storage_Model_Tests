@@ -6,10 +6,16 @@ package Test_Support is
 
    type Host_Array_Access is access all Integer_Array;
 
+   type Cinteger_Array is array (Integer range 1 .. 3) of Integer;
+   type Host_Carray_Access is access all Cinteger_Array;
+
    procedure Free is new Ada.Unchecked_Deallocation
      (Integer_Array, Host_Array_Access);
 
    Host_Array : Host_Array_Access := new Integer_Array (1 .. 10);
+   Host_Carray : hoSt_Carray_Access := new Cinteger_Array;
+   Test_Carray_Value : Cinteger_Array := (10, 20, 30);
+   Test_Carray_Reset : Cinteger_Array := (others => 0);
 
    Test_Array_Value : Integer_Array := (10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
    Test_Array_Reset : Integer_Array (1 .. 10) := (others => 0);

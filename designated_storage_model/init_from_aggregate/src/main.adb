@@ -12,11 +12,13 @@ procedure Main is
 
    Device_Array : Device_Array_Access;
 begin
+   Model.Display_Log := True;
+
    Device_Array := new Integer_Array'(1 .. 10 => 999);
 
    pragma Assert (Model.Count_Read = 0);
    Host_Array.all := Device_Array.all;
-   pragma Assert (Model.Count_Read = 1);
+   pragma Assert (Model.Count_Read >= 1);
 
    pragma Assert (Host_Array (1 .. 10) = (1 .. 10 => 999));
 end;
