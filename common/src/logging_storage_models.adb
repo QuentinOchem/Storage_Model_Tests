@@ -7,10 +7,9 @@ with System.CRTL; use System.CRTL;
 package body Logging_Storage_Models is
 
    function Convert1 is new Ada.Unchecked_Conversion (System.Address, Long_Integer);
-   function Convert2 is new Ada.Unchecked_Conversion (Long_Integer, Logging_Address);
 
-   function Convert3 is new Ada.Unchecked_Conversion (Logging_Address, Long_Integer);
-   function Convert4 is new Ada.Unchecked_Conversion (Long_Integer, System.Address);
+   function Convert_Ia_To_La is new Ada.Unchecked_Conversion (Integer_Address, Logging_Address);
+   function Convert_La_To_Ia is new Ada.Unchecked_Conversion (Logging_Address, Integer_Address);
 
    procedure Log (Model : Logging_Storage_Model; Text : String) is
    begin
@@ -33,22 +32,22 @@ package body Logging_Storage_Models is
 
    function Host_To_Device (Addr: System.Address) return Logging_Address
    is
-      Int_Address : Long_Integer;
+      Int_Address : Integer_Address;
    begin
-      Int_Address := Convert1 (Addr);
-      Int_Address := Int_Address + 2**62;
+      Int_Address := To_Integer (Addr);
+      Int_Address := Int_Address + 2**(Integer_Address'Size-2);
 
-      return Convert2 (Int_Address);
+      return Convert_Ia_To_La (Int_Address);
    end Host_To_Device;
 
    function Device_To_Host (Addr: Logging_Address) return System.Address
    is
-      Int_Address : Long_Integer;
+      Int_Address : Integer_Address;
    begin
-      Int_Address := Convert3 (Addr);
-      Int_Address := Int_Address - 2**62;
+      Int_Address := Convert_La_To_Ia (Addr);
+      Int_Address := Int_Address - 2**(Integer_Address'Size-2);
 
-      return Convert4 (Int_Address);
+      return To_Address (Int_Address);
    end Device_To_Host;
 
    procedure Logging_Allocate
