@@ -4,6 +4,12 @@ set -eu
 line='----------------------------------------'
 
 BACKEND=${BACKEND:="llvm-gcc"}
+TARGET=""
+
+if [ "${BACKEND}" == "llvm-gcc" ]
+then
+    TARGET="--target=llvm"
+fi
 
 result=$(realpath result.txt)
 rm -f "$result"
@@ -13,7 +19,7 @@ for NAME in *; do
         continue
     fi
     pushd "$NAME"
-    if gprbuild -v -P test -f -Xbackend="$BACKEND"; then
+    if gprbuild -v -P test -f "${TARGET}"; then
         if ./obj/main; then
             printf "$NAME %s [OK]\n" "${line:${#NAME}}" >> "$result"
         else
