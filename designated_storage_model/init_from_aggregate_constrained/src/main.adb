@@ -21,6 +21,7 @@ begin
    Model.Display_Log := True;
 
    Device_Array := new Cinteger_Array'(1 .. 3 => 999);
+   Host_CArray.all := Test_Carray_Reset;
 
    Put_Line ("Host value: " & Host_Carray.all'Image);
    pragma Assert (Model.Count_Read = 0);
